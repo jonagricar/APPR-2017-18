@@ -16,7 +16,7 @@ V drugi tabeli bom hierarhično predstavila naslove smučarjev in smučark glede
 
 V tretji tabeli pa bodo zbrani skupni rezultati svetovnega pokala po državah (vrstice), v stolpcih pa bo prikazano skupno število zmag glede na spol in disciplino. Ker nekatere države ne obstajajo več in tabela predstavlja vse države, katere športniki so kadarkoli zmagali v svetovnem pokalu, bosta v tej skupni tabeli navadeni obe državi, "stara" in "nova".
 
-Zadnja tabela bo pokazala, v katerih državah so potekale tekme svetovnega pokala doslej in iz tega bom potem naredila tudi zemljevid.
+Na koncu pa bom v projekt vključila še zemljevid, ki bo imel obarvane države glede na tretjo tabelo - države, iz katerih so bili/so športniki/-ce, ki so osvojili kakšno zmago v svetovnem pokalu.
 
 ## Program
 
