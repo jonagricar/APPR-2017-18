@@ -20,8 +20,9 @@ uvozi.smucarje1 <- function() {
   tabela1$država[tabela1$država == "Austria"] <- "Avstrija"
   tabela1$država[tabela1$država == "Switzerland"] <- "Švica"
   tabela1$država[tabela1$država == "France"] <- "Francija"
+  row.names(tabela1) <- nrow(tabela1):1
   
-  return(tabela)
+  return(tabela1)
 }
 
 # Funkcija, ki uvozi smučarje iz Wikipedije - 2.tabela
@@ -63,34 +64,58 @@ uvozi.smucarje2 <- function() {
   tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Croatia"] <- "Hrvaška"
   tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Slovenia"] <- "Slovenija"
   tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Switzerland"] <- "Švica"
+  row.names(tabela2) <- 1:nrow(tabela2)
   
-  return(tabela)
+  return(tabela2)
 }
 
-# Funkcija, ki uvozi občine iz Wikipedije
-uvozi.obcine <- function() {
-  link <- "http://sl.wikipedia.org/wiki/Seznam_ob%C4%8Din_v_Sloveniji"
+# Funkcija, ki uvozi rezultate po disciplinah M iz Wikipedije - 3.tabela
+uvozi.discipline1 <- function() {
+  link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
   stran <- html_session(link) %>% read_html()
-  tabela <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-    .[[1]] %>% html_table(dec = ",")
+  tabela3 <- stran %>% html_nodes(xpath="//table[@class='wikitable plainrowheaders']") %>%
+    .[[6]] %>% html_table(dec = ",")
   for (i in 1:ncol(tabela)) {
     if (is.character(tabela[[i]])) {
       Encoding(tabela[[i]]) <- "UTF-8"
     }
   }
-  colnames(tabela) <- c("obcina", "povrsina", "prebivalci", "gostota", "naselja",
-                        "ustanovitev", "pokrajina", "regija", "odcepitev")
-  tabela$obcina <- gsub("Slovenskih", "Slov.", tabela$obcina)
-  tabela$obcina[tabela$obcina == "Kanal ob Soči"] <- "Kanal"
-  tabela$obcina[tabela$obcina == "Loški potok"] <- "Loški Potok"
-  for (col in c("povrsina", "prebivalci", "gostota", "naselja", "ustanovitev")) {
-    tabela[[col]] <- parse_number(tabela[[col]], na = "-", locale = sl)
-  }
-  for (col in c("obcina", "pokrajina", "regija")) {
-    tabela[[col]] <- factor(tabela[[col]])
-  }
-  return(tabela)
+  colnames(tabela3) <- c("DISCIPLINA", "SMUČAR/-KA", "DRŽAVA", "ŠTEVILO NASLOVOV")
+  tabela3[2, 2] <- "Hermann Maier / Aksel Lund Svindal"
+  tabela3[2, 3] <- "Avstrija / Norveška"
+  tabela3$SPOL <- "M"
+  tabela3 <- tabela3[ , c("DISCIPLINA", "SPOL", "SMUČAR/-KA", "DRŽAVA", "ŠTEVILO NASLOVOV")]
+  
+  return(tabela3)
 }
+
+# Funkcija, ki uvozi rezultate po disciplinah Ž iz Wikipedije - 4.tabela
+uvozi.discipline2 <- function() {
+  link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
+  stran <- html_session(link) %>% read_html()
+  tabela4 <- stran %>% html_nodes(xpath="//table[@class='wikitable plainrowheaders']") %>%
+    .[[7]] %>% html_table(dec = ",")
+  for (i in 1:ncol(tabela)) {
+    if (is.character(tabela[[i]])) {
+      Encoding(tabela[[i]]) <- "UTF-8"
+    }
+  }
+  colnames(tabela4) <- c("DISCIPLINA", "SMUČAR/-KA", "DRŽAVA", "ŠTEVILO NASLOVOV")
+  tabela4[5, 2] <- "Brigitte Örtli / Janica Kostelić"
+  tabela4[5, 3] <- "Švica / Hrvaška"
+  tabela4$SPOL <- "Ž"
+  tabela4 <- tabela4[ , c("DISCIPLINA", "SPOL", "SMUČAR/-KA", "DRŽAVA", "ŠTEVILO NASLOVOV")]
+  
+  return(tabela4)
+}
+
+# Funkcija, ki združi 3. in 4. tabelo v DISCIPLINE
+discipline_naslovi <- rbind(tabela3, tabela4)
+discipline_naslovi$DISCIPLINA[discipline_naslovi$DISCIPLINA == "Downhill"] <- "Smuk"
+discipline_naslovi$DISCIPLINA[discipline_naslovi$DISCIPLINA == "Super-G"] <- "Superveleslalom"
+discipline_naslovi$DISCIPLINA[discipline_naslovi$DISCIPLINA == "Giant Slalom"] <- "Veleslalom"
+discipline_naslovi$DISCIPLINA[discipline_naslovi$DISCIPLINA == "Combined"] <- "Kombinacija"
+discipline_naslovi <- discipline_naslovi[c("1", "6", "2", "7", "3", "8", "4", "9", "5", "10"), ]
 
 # Zapišimo podatke v razpredelnico obcine
 obcine <- uvozi.obcine()
