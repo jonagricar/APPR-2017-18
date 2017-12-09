@@ -2,6 +2,71 @@
 
 sl <- locale("sl", decimal_mark = ",", grouping_mark = ".")
 
+# Funkcija, ki uvozi občine iz Ski-DB - 1.tabela
+uvozi.smucarje1 <- function() {
+  link <- "http://www.ski-db.com/worldcup.php"
+  stran <- html_session(link) %>% read_html()
+  tabela1 <- stran %>% html_nodes(xpath="//table[@class='primary']") %>%
+    .[[4]] %>% html_table(dec = ",", fill = TRUE)
+  for (i in 1:ncol(tabela)) {
+    if (is.character(tabela[[i]])) {
+      Encoding(tabela[[i]]) <- "UTF-8"
+    }
+  }
+  tabela1 <- tabela1[ , c(1:4, 7:9, 11:12)]
+  tabela1 <- tabela1[2:52, ]
+  colnames(tabela1) <- c("sezona", "moški zmagovalec", "točke M", "starost ob zmagi M", "ženska zmagovalka",
+                        "točke Ž", "starost ob zmagi Ž", "država", "točke")
+  tabela1$država[tabela1$država == "Austria"] <- "Avstrija"
+  tabela1$država[tabela1$država == "Switzerland"] <- "Švica"
+  tabela1$država[tabela1$država == "France"] <- "Francija"
+  
+  return(tabela)
+}
+
+# Funkcija, ki uvozi smučarje iz Wikipedije - 2.tabela
+uvozi.smucarje2 <- function() {
+  link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
+  stran <- html_session(link) %>% read_html()
+  tabela2 <- stran %>% html_nodes(xpath="//table[@class='wikitable plainrowheaders']") %>%
+    .[[1]] %>% html_table(dec = ",", fill = TRUE)
+  for (i in 1:ncol(tabela)) {
+    if (is.character(tabela[[i]])) {
+      Encoding(tabela[[i]]) <- "UTF-8"
+    }
+  }
+  tabela2 <- tabela2[ , c(1, 3, 5, 6:7)]
+  tabela2 <- tabela2[2:52, ]
+  colnames(tabela2) <- c("sezona", "moški zmagovalec", "narodnost_M", "ženska zmagovalka", "narodnost_Ž")
+  tabela2[1, 1] <- "1966/67"
+  tabela2[2, 1] <- "1967/68"
+  tabela2$narodnost_M[tabela2$narodnost_M == "Austria"] <- "Avstrija"
+  tabela2$narodnost_M[tabela2$narodnost_M == "Switzerland"] <- "Švica"
+  tabela2$narodnost_M[tabela2$narodnost_M == "France"] <- "Francija"
+  tabela2$narodnost_M[tabela2$narodnost_M == "Italy"] <- "Italija"
+  tabela2$narodnost_M[tabela2$narodnost_M == "United States"] <- "ZDA"
+  tabela2$narodnost_M[tabela2$narodnost_M == "Liechtenstein"] <- "Lihtenštajn"
+  tabela2$narodnost_M[tabela2$narodnost_M == "Sweden"] <- "Švedska"
+  tabela2$narodnost_M[tabela2$narodnost_M == "Luxembourg"] <- "Luksemburg"
+  tabela2$narodnost_M[tabela2$narodnost_M == "Norway"] <- "Norveška"
+  tabela2$narodnost_M[tabela2$narodnost_M == "Croatia"] <- "Hrvaška"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Germany"] <- "Nemčija"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Slovenia"] <- "Slovenija"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Canada"] <- "Kanada"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "West Germany"] <- "Zahodna Nemčija"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Austria"] <- "Avstrija"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "France"] <- "Francija"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Italy"] <- "Italija"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "United States"] <- "ZDA"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Liechtenstein"] <- "Lihtenštajn"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Sweden"] <- "Švedska"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Croatia"] <- "Hrvaška"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Slovenia"] <- "Slovenija"
+  tabela2$narodnost_Ž[tabela2$narodnost_Ž == "Switzerland"] <- "Švica"
+  
+  return(tabela)
+}
+
 # Funkcija, ki uvozi občine iz Wikipedije
 uvozi.obcine <- function() {
   link <- "http://sl.wikipedia.org/wiki/Seznam_ob%C4%8Din_v_Sloveniji"
@@ -25,20 +90,6 @@ uvozi.obcine <- function() {
     tabela[[col]] <- factor(tabela[[col]])
   }
   return(tabela)
-}
-
-# Funkcija, ki uvozi podatke iz datoteke druzine.csv
-uvozi.druzine <- function(obcine) {
-  data <- read_csv2("podatki/druzine.csv", col_names = c("obcina", 1:4),
-                    locale = locale(encoding = "Windows-1250"))
-  data$obcina <- data$obcina %>% strapplyc("^([^/]*)") %>% unlist() %>%
-    strapplyc("([^ ]+)") %>% sapply(paste, collapse = " ") %>% unlist()
-  data$obcina[data$obcina == "Sveti Jurij"] <- "Sveti Jurij ob Ščavnici"
-  data <- data %>% melt(id.vars = "obcina", variable.name = "velikost.druzine",
-                        value.name = "stevilo.druzin")
-  data$velikost.druzine <- parse_number(data$velikost.druzine)
-  data$obcina <- factor(data$obcina, levels = obcine)
-  return(data)
 }
 
 # Zapišimo podatke v razpredelnico obcine
