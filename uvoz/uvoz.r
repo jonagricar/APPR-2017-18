@@ -25,6 +25,12 @@ uvozi.smucarje1 <- function() {
   return(tabela1)
 }
 
+smucarji1 <- tabela1[ , c(1:4)]
+smucarke1 <- tabela1[ , c(1, 5:7)]
+smucarji2 <- tabela2[ , c(1:3)]
+smucarke2 <- tabela2[ , c(1, 4:5)]
+
+
 # Funkcija, ki uvozi smučarje iz Wikipedije - 2.tabela
 uvozi.smucarje2 <- function() {
   link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
@@ -103,6 +109,8 @@ uvozi.discipline2 <- function() {
   colnames(tabela4) <- c("DISCIPLINA", "SMUČAR/-KA", "DRŽAVA", "ŠTEVILO NASLOVOV")
   tabela4[5, 2] <- "Brigitte Örtli / Janica Kostelić"
   tabela4[5, 3] <- "Švica / Hrvaška"
+  tabela4[2, 2] <- "Katja Seizinger / Lindsey Vonn"
+  tabela4[2, 3] <- "Nemčija / ZDA"
   tabela4$SPOL <- "Ž"
   tabela4 <- tabela4[ , c("DISCIPLINA", "SPOL", "SMUČAR/-KA", "DRŽAVA", "ŠTEVILO NASLOVOV")]
   
@@ -116,6 +124,11 @@ discipline_naslovi$DISCIPLINA[discipline_naslovi$DISCIPLINA == "Super-G"] <- "Su
 discipline_naslovi$DISCIPLINA[discipline_naslovi$DISCIPLINA == "Giant Slalom"] <- "Veleslalom"
 discipline_naslovi$DISCIPLINA[discipline_naslovi$DISCIPLINA == "Combined"] <- "Kombinacija"
 discipline_naslovi <- discipline_naslovi[c("1", "6", "2", "7", "3", "8", "4", "9", "5", "10"), ]
+discipline_naslovi$DRŽAVA[discipline_naslovi$DRŽAVA == "Austria"] <- "Avstrija"
+discipline_naslovi$DRŽAVA[discipline_naslovi$DRŽAVA == "Switzerland"] <- "Švica"
+discipline_naslovi$DRŽAVA[discipline_naslovi$DRŽAVA == "United States"] <- "ZDA"
+discipline_naslovi$DRŽAVA[discipline_naslovi$DRŽAVA == "Sweden"] <- "Švedska"
+discipline_naslovi$DRŽAVA[discipline_naslovi$DRŽAVA == "Norway"] <- "Norveška"
 
 # Zapišimo podatke v razpredelnico obcine
 obcine <- uvozi.obcine()
