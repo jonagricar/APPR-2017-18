@@ -130,11 +130,6 @@ discipline_naslovi$DRŽAVA[discipline_naslovi$DRŽAVA == "United States"] <- "ZD
 discipline_naslovi$DRŽAVA[discipline_naslovi$DRŽAVA == "Sweden"] <- "Švedska"
 discipline_naslovi$DRŽAVA[discipline_naslovi$DRŽAVA == "Norway"] <- "Norveška"
 
-# Zapišimo podatke v razpredelnico obcine
-obcine <- uvozi.obcine()
-
-# Zapišimo podatke v razpredelnico druzine.
-druzine <- uvozi.druzine(levels(obcine$obcina))
 
 # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
 # potrebovali v 3. fazi, bi bilo smiselno funkcije dati v svojo
