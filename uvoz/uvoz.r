@@ -34,7 +34,7 @@ uvozi.smucarje2 <- function() {
       Encoding(tabela2[[i]]) <- "UTF-8"
     }
   }
-  tabela2 <- tabela2[ , c(1, 3, 5, 6:7)]
+  tabela2 <- tabela2[ , c(1, 3:4, 6:7)]
   tabela2 <- tabela2[2:52, ]
   colnames(tabela2) <- c("sezona", "moski zmagovalec", "narodnost_M", "zenska zmagovalka", "narodnost_Z")
   tabela2[1, 1] <- "1966/67"
@@ -77,7 +77,18 @@ drzave.slo <- c(
   "Germany" = "Nemčija",
   "West Germany" = "Zahodna Nemčija",
   "Slovenia" = "Slovenija",
-  "Canada" = "Kanada"
+  "Canada" = "Kanada",
+  "Australia" = "Avstralija",
+  "Bulgaria" = "Bolgarija",
+  "Soviet Union" = "Sovjetska zveza",
+  "Poland" = "Poljska",
+  "Czechoslovakia" = "Češkoslovaška",
+  "Spain" = "Španija",
+  "Finland" = "Finska",
+  "New Zealand" = "Nova Zelandija",
+  "Russia" = "Rusija",
+  "Slovakia" = "Slovaška",
+  "Czech Republic" = "Češka"
 )
 
 zmagovalci.slo <- zmagovalci %>% mutate(narodnost = drzave.slo[narodnost])
@@ -128,11 +139,67 @@ discipline$disciplina[discipline$disciplina == "Downhill"] <- "Smuk"
 discipline$disciplina[discipline$disciplina == "Super-G"] <- "Superveleslalom"
 discipline$disciplina[discipline$disciplina == "Giant Slalom"] <- "Veleslalom"
 discipline$disciplina[discipline$disciplina == "Combined"] <- "Kombinacija"
-discipline$narodnost[discipline$narodnost == "Austria"] <- "Avstrija"
-discipline$narodnost[discipline$narodnost == "Switzerland"] <- "Švica"
-discipline$narodnost[discipline$narodnost == "United States"] <- "ZDA"
-discipline$narodnost[discipline$narodnost == "Sweden"] <- "Švedska"
-discipline$narodnost[discipline$narodnost == "Norway"] <- "Norveška"
+
+dvojni <- grep("[[:lower:]][[:upper:]]", discipline$smucar)
+discipline <- apply(discipline[dvojni, ], 1, . %>% as.list() %>%
+{ data.frame(disciplina = .$disciplina, spol = .$spol,
+             smucar = .$smucar %>%
+               strapplyc("(.*[[:lower:]])([[:upper:]].*)") %>% unlist(),
+             narodnost = .$narodnost %>%
+               strapplyc("([[:alnum:] ]+)[^[:alnum:] ]+([[:alnum:] ]+)") %>%
+               unlist(), naslovi = .$naslovi,
+             stringsAsFactors = FALSE) }) %>%
+  bind_rows() %>% rbind(discipline[-dvojni, ]) %>% arrange(disciplina, spol)
+
+discipline.slo <- discipline %>% mutate(narodnost = drzave.slo[narodnost])
+
+
+# Funkcija, ki uvozi narode iz Wikipedije
+uvozi.narode <- function() {
+  link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
+  stran <- html_session(link) %>% read_html()
+  narodi <- stran %>% html_nodes(xpath="//table[@class='wikitable plainrowheaders']") %>%
+    .[[50]] %>% html_table(dec = ",", fill = TRUE)
+  for (i in 1:ncol(narodi)) {
+    if (is.character(narodi[[i]])) {
+      Encoding(narodi[[i]]) <- "UTF-8"
+    }
+  }
+  narodi <- narodi[c(-1, -2, -27), c(1:6)]
+  row.names(narodi) <- 1:nrow(narodi)
+  narodi[19, 1] <- "18"
+  narodi[21, 1] <- narodi[22, 1] <- "20"
+  narodi[23, 1] <- "23"
+  colnames(narodi) <- c("rang", "drzava", "moski", "zenske", "ekipno", "skupno")
+  
+  return(tabela)
+}
+
+narodi <- uvozi.narode()
+
+narodi.slo <- narodi %>% mutate(drzava = drzave.slo[drzava])
+
+#Uvozimo prizorišča
+uvozi.prizorisce <- function() {
+  link <- "http://www.ski-db.com/db/loc/main.php"
+  stran <- html_session(link) %>% read_html()
+  prizorisca <- stran %>% html_nodes(xpath="//table[@class='primary']") %>%
+    .[[1]] %>% html_table(dec = ",", fill = TRUE)
+  for (i in 1:ncol(prizorisca)) {
+    if (is.character(prizorisca[[i]])) {
+      Encoding(prizorisca[[i]]) <- "UTF-8"
+    }
+  }
+  prizorisca <- prizorisca[c(-1, -5, -13, -26, -31, -39, -41, -44, -77, -82,
+                             -90, -92, -104, -128, -132, -140, -146, -152), ]
+  prizorisca <- prizorisca[ , c(1:2, 4:5)]
+  row.names(prizorisca) <- 1 : nrow(prizorisca)
+  colnames(prizorisca) <- c("prizorisce", "kratica", "moski", "zenske")
+  
+  return(prizorisca)
+}
+
+prizorisca <- uvozi.prizorisce()
 
 
 # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
