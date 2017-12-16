@@ -60,6 +60,8 @@ zmagovalci <- rbind(smucarji, smucarke) %>%
   select(sezona, spol, zmagovalec, narodnost, tocke, starost) %>% arrange(sezona, spol)
 
 zmagovalci <- zmagovalci %>% mutate(sezona = sezona %>% parse_number(),
+                                    tocke = tocke %>% parse_number(),
+                                    starost = starost %>% parse_number(),
                                     zmagovalec = zmagovalec %>% strapplyc("^([^(]+)") %>%
                                       unlist() %>% trimws())
 
@@ -150,9 +152,9 @@ discipline <- apply(discipline[dvojni, ], 1, . %>% as.list() %>%
                unlist(), naslovi = .$naslovi,
              stringsAsFactors = FALSE) }) %>%
   bind_rows() %>% rbind(discipline[-dvojni, ]) %>% arrange(disciplina, spol)
+discipline <- discipline %>% mutate(naslovi = naslovi %>% parse_number())
 
 discipline.slo <- discipline %>% mutate(narodnost = drzave.slo[narodnost])
-
 
 # Funkcija, ki uvozi narode iz Wikipedije
 uvozi.narode <- function() {
@@ -172,7 +174,7 @@ uvozi.narode <- function() {
   narodi[23, 1] <- "23"
   colnames(narodi) <- c("rang", "drzava", "moski", "zenske", "ekipno", "skupno")
   
-  return(tabela)
+  return(narodi)
 }
 
 narodi <- uvozi.narode()
@@ -183,24 +185,70 @@ narodi.slo <- narodi %>% mutate(drzava = drzave.slo[drzava])
 uvozi.prizorisce <- function() {
   link <- "http://www.ski-db.com/db/loc/main.php"
   stran <- html_session(link) %>% read_html()
-  prizorisca <- stran %>% html_nodes(xpath="//table[@class='primary']") %>%
-    .[[1]] %>% html_table(dec = ",", fill = TRUE)
+  html_tabela <- stran %>% html_nodes(xpath="//table[@class='primary']") %>% .[[1]]
+  prizorisca <- html_tabela %>% html_table(dec = ",", fill = TRUE) %>% .[-1, ]
+  prizorisca[[3]] <- html_tabela %>% html_nodes(xpath=".//img") %>% html_attr("src") %>%
+    strapplyc("([a-z]+)_2\\.gif$") %>% unlist()
   for (i in 1:ncol(prizorisca)) {
     if (is.character(prizorisca[[i]])) {
       Encoding(prizorisca[[i]]) <- "UTF-8"
     }
   }
-  prizorisca <- prizorisca[c(-1, -5, -13, -26, -31, -39, -41, -44, -77, -82,
-                             -90, -92, -104, -128, -132, -140, -146, -152), ]
-  prizorisca <- prizorisca[ , c(1:2, 4:5)]
-  row.names(prizorisca) <- 1 : nrow(prizorisca)
-  colnames(prizorisca) <- c("prizorisce", "kratica", "moski", "zenske")
-  
+  prizorisca <- prizorisca[, 1:5]
+  colnames(prizorisca) <- c("prizorisce", "kratica", "drzava", "moski", "zenske")
+  prizorisca <- prizorisca %>% mutate(moski = parse_number(moski),
+                                      zenske = parse_number(zenske)) %>%
+    filter(!is.na(moski) | !is.na(zenske))
   return(prizorisca)
 }
 
 prizorisca <- uvozi.prizorisce()
 
+kratice.slo <- c(
+  "aut" = "Avstrija",
+  "sui" = "Švica",
+  "fra" = "Francija",
+  "ita" = "Italija",
+  "usa" = "ZDA",
+  "swe" = "Švedska",
+  "nor" = "Norveška",
+  "cro" = "Hrvaška",
+  "ger" = "Nemčija",
+  "and" = "Andora",
+  "slo" = "Slovenija",
+  "can" = "Kanada",
+  "aus" = "Avstralija",
+  "bul" = "Bolgarija",
+  "pol" = "Poljska",
+  "bih" = "Bosna in Hercegovina",
+  "spa" = "Španija",
+  "rus" = "Rusija",
+  "svk" = "Slovaška",
+  "cze" = "Češka",
+  "kor" = "Južna Koreja",
+  "jpn" = "Japonska",
+  "arg" = "Argentina",
+  "nze" = "Nova Zelandija",
+  "fin" = "Finska"
+)
+
+prizorisca1 <- prizorisca[ , c(1:3)]
+
+prizorisca11 <- prizorisca[ , c(2, 4)]
+prizorisca11$spol <- "M"
+colnames(prizorisca11) <- c("kratica", "tekme", "spol")
+prizorisca11 <- prizorisca11[,c("kratica", "spol", "tekme")]
+
+prizorisca12 <- prizorisca[ , c(2, 5)]
+prizorisca12$spol <- "Z"
+colnames(prizorisca12) <- c("kratica", "tekme", "spol")
+prizorisca12 <- prizorisca12[,c("kratica", "spol", "tekme")]
+
+prizorisca2 <- rbind(prizorisca11, prizorisca12) %>%
+  select(kratica, spol, tekme) %>% arrange(kratica, spol)
+
+
+prizorisca.slo <- prizorisca %>% mutate(drzava = kratice.slo[drzava])
 
 # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
 # potrebovali v 3. fazi, bi bilo smiselno funkcije dati v svojo
