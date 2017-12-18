@@ -233,22 +233,14 @@ kratice.slo <- c(
 )
 
 prizorisca1 <- prizorisca[ , c(1:3)]
+prizorisca1.slo <- prizorisca1 %>% mutate(drzava = kratice.slo[drzava])
 
-prizorisca11 <- prizorisca[ , c(2, 4)]
-prizorisca11$spol <- "M"
-colnames(prizorisca11) <- c("kratica", "tekme", "spol")
-prizorisca11 <- prizorisca11[,c("kratica", "spol", "tekme")]
+prizorisca_2 <- prizorisca %>% select(kratica, moski, zenske) %>%
+  melt(variable.name = "spol", value.name = "tekme", na.rm = TRUE) %>%
+  arrange(kratica, spol)
 
-prizorisca12 <- prizorisca[ , c(2, 5)]
-prizorisca12$spol <- "Z"
-colnames(prizorisca12) <- c("kratica", "tekme", "spol")
-prizorisca12 <- prizorisca12[,c("kratica", "spol", "tekme")]
-
-prizorisca2 <- rbind(prizorisca11, prizorisca12) %>%
-  select(kratica, spol, tekme) %>% arrange(kratica, spol)
-
-
-prizorisca.slo <- prizorisca %>% mutate(drzava = kratice.slo[drzava])
+spol.kratice <- c("moski" = "M", "zenski" = "Z")
+prizorisca2 <- prizorisca_2 %>% mutate(spol = spol.kratice[spol])
 
 # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
 # potrebovali v 3. fazi, bi bilo smiselno funkcije dati v svojo
