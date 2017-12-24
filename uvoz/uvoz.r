@@ -172,14 +172,35 @@ uvozi.narode <- function() {
   narodi[19, 1] <- "18"
   narodi[21, 1] <- narodi[22, 1] <- "20"
   narodi[23, 1] <- "23"
-  colnames(narodi) <- c("rang", "drzava", "moski", "zenske", "ekipno", "skupno")
+  colnames(narodi) <- c("rang", "drzava", "moski", "zenske", "ekipno", "zmage")
   
   return(narodi)
 }
 
 narodi <- uvozi.narode()
+narodi <- narodi %>% mutate(rang = rang %>% parse_number())
 
-narodi.slo <- narodi %>% mutate(drzava = drzave.slo[drzava])
+narodi1 <- narodi[ , c(1:2, 6)]
+narodi1.slo <- narodi1 %>% mutate(drzava = drzave.slo[drzava])
+
+narodim <- narodi[ , c(1:3)]
+narodim <- narodim %>% mutate(moski = parse_number(moski)) %>% filter(!is.na(moski))
+narodim$spol <- "M"
+
+narodiz <- narodi[ , c(1:2, 4)]
+narodiz <- narodiz %>% mutate(zenske = parse_number(zenske)) %>% filter(!is.na(zenske))
+narodiz$spol <- "Z"
+
+narodie <- narodi[ , c(1:2, 5)]
+narodie <- narodie %>% mutate(ekipno = parse_number(ekipno)) %>% filter(!is.na(ekipno))
+narodie$spol <- "EK"
+
+colnames(narodim) <- colnames(narodiz) <- colnames(narodie) <- c("rang", "drzava", "zmage", "spol")
+
+narodi2 <- rbind(narodim, narodiz, narodie) %>%
+  select(rang, drzava, spol, zmage) %>% arrange(rang, spol)
+narodi2.slo <- narodi2 %>% mutate(drzava = drzave.slo[drzava])
+
 
 #Uvozimo prizorišča
 uvozi.prizorisce <- function() {
