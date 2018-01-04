@@ -2,7 +2,7 @@
 
 sl <- locale("sl", decimal_mark = ",", grouping_mark = ".")
 
-# Funkcija, ki uvozi občine iz Ski-DB - 1.tabela
+# Funkcija, ki uvozi smučarje iz Ski-DB - 1.tabela
 uvozi.smucarje1 <- function() {
   link <- "http://www.ski-db.com/worldcup.php"
   stran <- html_session(link) %>% read_html()
@@ -77,7 +77,7 @@ drzave.slo <- c(
   "Norway" = "Norveška",
   "Croatia" = "Hrvaška",
   "Germany" = "Nemčija",
-  "West Germany" = "Zahodna Nemčija",
+  "West Germany" = "Nemčija",
   "Slovenia" = "Slovenija",
   "Canada" = "Kanada",
   "Australia" = "Avstralija",
@@ -134,7 +134,7 @@ uvozi.discipline2 <- function() {
 tabela3 <- uvozi.discipline1()
 tabela4 <- uvozi.discipline2()
 
-# Funkcija, ki združi 3. in 4. tabelo v DISCIPLINE
+#ZDRUŽENA TABELA DISCIPLINE
 discipline <- rbind(tabela3, tabela4) %>%
   select(disciplina, spol, smucar, narodnost, naslovi) %>% arrange(disciplina, spol)
 discipline$disciplina[discipline$disciplina == "Downhill"] <- "Smuk"
@@ -156,7 +156,7 @@ discipline <- discipline %>% mutate(naslovi = naslovi %>% parse_number())
 
 discipline.slo <- discipline %>% mutate(narodnost = drzave.slo[narodnost])
 
-# Funkcija, ki uvozi narode iz Wikipedije
+#UVOZIMO ZAČETNO TABELO ZA NARODE
 uvozi.narode <- function() {
   link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
   stran <- html_session(link) %>% read_html()
@@ -183,26 +183,15 @@ narodi <- narodi %>% mutate(rang = rang %>% parse_number())
 narodi1 <- narodi[ , c(1:2, 6)]
 narodi1.slo <- narodi1 %>% mutate(drzava = drzave.slo[drzava])
 
-narodim <- narodi[ , c(1:3)]
-narodim <- narodim %>% mutate(moski = parse_number(moski)) %>% filter(!is.na(moski))
-narodim$spol <- "M"
 
-narodiz <- narodi[ , c(1:2, 4)]
-narodiz <- narodiz %>% mutate(zenske = parse_number(zenske)) %>% filter(!is.na(zenske))
-narodiz$spol <- "Z"
-
-narodie <- narodi[ , c(1:2, 5)]
-narodie <- narodie %>% mutate(ekipno = parse_number(ekipno)) %>% filter(!is.na(ekipno))
-narodie$spol <- "EK"
-
-colnames(narodim) <- colnames(narodiz) <- colnames(narodie) <- c("rang", "drzava", "zmage", "spol")
-
-narodi2 <- rbind(narodim, narodiz, narodie) %>%
-  select(rang, drzava, spol, zmage) %>% arrange(rang, spol)
+narodi2 <- narodi %>% select(-rang, -zmage) %>% melt(id.vars = "drzava", variable.name = "spol",
+                                                     value.name = "zmage") %>%
+  mutate(zmage = parse_number(zmage, na = "–")) %>% drop_na(zmage) %>%
+  arrange(drzava, spol)
 narodi2.slo <- narodi2 %>% mutate(drzava = drzave.slo[drzava])
 
 
-#Uvozimo prizorišča
+#UVOZIMO ZAČETNO TABELO ZA PRIZORIŠČA
 uvozi.prizorisce <- function() {
   link <- "http://www.ski-db.com/db/loc/main.php"
   stran <- html_session(link) %>% read_html()
@@ -256,12 +245,10 @@ kratice.slo <- c(
 prizorisca1 <- prizorisca[ , c(1:3)]
 prizorisca1.slo <- prizorisca1 %>% mutate(drzava = kratice.slo[drzava])
 
-prizorisca_2 <- prizorisca %>% select(kratica, moski, zenske) %>%
+prizorisca2 <- prizorisca %>% select(kratica, moski, zenske) %>%
   melt(variable.name = "spol", value.name = "tekme", na.rm = TRUE) %>%
   arrange(kratica, spol)
 
-spol.kratice <- c("moski" = "M", "zenski" = "Z")
-prizorisca2 <- prizorisca_2 %>% mutate(spol = spol.kratice[spol])
 
 # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
 # potrebovali v 3. fazi, bi bilo smiselno funkcije dati v svojo
