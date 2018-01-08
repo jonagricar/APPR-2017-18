@@ -39,6 +39,7 @@ uvozi.smucarje2 <- function() {
   colnames(tabela2) <- c("sezona", "moski zmagovalec", "narodnost_M", "zenska zmagovalka", "narodnost_Z")
   tabela2[1, 1] <- "1966/67"
   tabela2[2, 1] <- "1967/68"
+  tabela2[10, 5] <- "Germany"
   row.names(tabela2) <- 1:nrow(tabela2)
   
   return(tabela2)
@@ -77,7 +78,6 @@ drzave.slo <- c(
   "Norway" = "Norveška",
   "Croatia" = "Hrvaška",
   "Germany" = "Nemčija",
-  "West Germany" = "Nemčija",
   "Slovenia" = "Slovenija",
   "Canada" = "Kanada",
   "Australia" = "Avstralija",
@@ -180,15 +180,11 @@ uvozi.narode <- function() {
 narodi <- uvozi.narode()
 narodi <- narodi %>% mutate(rang = rang %>% parse_number())
 
-narodi1 <- narodi[ , c(1:2, 6)]
-narodi1.slo <- narodi1 %>% mutate(drzava = drzave.slo[drzava])
-
-
-narodi2 <- narodi %>% select(-rang, -zmage) %>% melt(id.vars = "drzava", variable.name = "spol",
+narodi1 <- narodi %>% select(-rang, -zmage) %>% melt(id.vars = "drzava", variable.name = "spol",
                                                      value.name = "zmage") %>%
   mutate(zmage = parse_number(zmage, na = "–")) %>% drop_na(zmage) %>%
   arrange(drzava, spol)
-narodi2.slo <- narodi2 %>% mutate(drzava = drzave.slo[drzava])
+narodi1.slo <- narodi1 %>% mutate(drzava = drzave.slo[drzava])
 
 
 #UVOZIMO ZAČETNO TABELO ZA PRIZORIŠČA
