@@ -1,7 +1,7 @@
 # 3. faza: Vizualizacija podatkov
 
 #GRAFI
-graf1 <- ggplot(narodi2.slo, aes(x = drzava, y = zmage, fill = spol)) +
+graf1 <- ggplot(narodi1.slo, aes(x = drzava, y = zmage, fill = spol)) +
   geom_bar(stat = "identity") +
   xlab("Država") + ylab("Število zmag") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5), 
@@ -39,14 +39,21 @@ graf4 <- ggplot(discipline.slo, aes(x = disciplina, y = naslovi, fill = spol)) +
   ggtitle("Število naslovov po disciplinah glede na spol")
 print(graf4)
 
+
 # Uvozimo zemljevid.
 zemljevid <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
-                             "ne_50m_admin_0_countries", encoding = "UTF-8")
+                             "ne_50m_admin_0_countries", encoding = "UTF-8") %>%
+  pretvori.zemljevid() %>% filter(CONTINENT %in% c("Europe", "North America"))
 
-levels(zemljevid$OB_UIME) <- levels(zemljevid$OB_UIME) %>%
-  { gsub("Slovenskih", "Slov.", .) } %>% { gsub("-", " - ", .) }
-zemljevid$OB_UIME <- factor(zemljevid$OB_UIME, levels = levels(obcine$obcina))
-zemljevid <- pretvori.zemljevid(zemljevid)
+
+zem.zmagovalci <- ggplot() + geom_polygon(data = zmagovalci %>% group_by(narodnost) %>%
+                                            summarise(stevilo = n()) %>%
+                                            right_join(zemljevid, by = c("narodnost" = "NAME_LONG")),
+                                          aes(x = long, y = lat, group = group, fill = stevilo)) +
+  coord_cartesian(xlim = c(-80, 22), ylim = c(37, 70))
+
+zemljevid1 <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
+                             "ne_50m_admin_0_countries", encoding = "UTF-8")
 
 # Izračunamo povprečno velikost družine
 povprecja <- druzine %>% group_by(obcina) %>%

@@ -238,8 +238,37 @@ kratice.slo <- c(
   "fin" = "Finska"
 )
 
+kratice.eng <- c(
+  "aut" = "Austria",
+  "sui" = "Switzerland",
+  "fra" = "France",
+  "ita" = "Italy",
+  "usa" = "United States",
+  "swe" = "Sweden",
+  "nor" = "Norway",
+  "cro" = "Croatia",
+  "ger" = "Germany",
+  "and" = "Andorra",
+  "slo" = "Slovenia",
+  "can" = "Canada",
+  "aus" = "Australia",
+  "bul" = "Bulgaria",
+  "pol" = "Poland",
+  "bih" = "Bosnia and Herzegovina",
+  "spa" = "Spain",
+  "rus" = "Russia",
+  "svk" = "Slovakia",
+  "cze" = "Czech Republic",
+  "kor" = "South Korea",
+  "jpn" = "Japan",
+  "arg" = "Argentina",
+  "nze" = "New Zealand",
+  "fin" = "Finland"
+)
+
 prizorisca1 <- prizorisca[ , c(1:3)]
 prizorisca1.slo <- prizorisca1 %>% mutate(drzava = kratice.slo[drzava])
+prizorisca1.eng <- prizorisca1 %>% mutate(drzava = kratice.eng[drzava])
 
 prizorisca2 <- prizorisca %>% select(kratica, moski, zenske) %>%
   melt(variable.name = "spol", value.name = "tekme", na.rm = TRUE) %>%
