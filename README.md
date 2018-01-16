@@ -10,13 +10,48 @@ Za temo projekta sem si izbrala svetovni pokal v alpskem smučanju, saj ta špor
 * https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup
 * http://www.ski-db.com/worldcup.php
 
-V prvi tabeli bom zajela skupne zmagovalce svetovnega pokala glede na spol in sezono(vrstice, od sezone 1966/1967 do danes); vsak/-a smučar/-ka pa bo imel/-a tudi podatek o tem, koliko točk je dosegel/-la v zmagovalni sezoni, starost ob pridobitvi naslova ter narodnost.
+Projekt vsebuje 5 tabel in sicer(po stolpcih):
 
-V drugi tabeli bom hierarhično predstavila naslove smučarjev in smučark glede na disiplino ali drugače rečeno: prvih nekaj večkratnih dobitnikov malih globusov v vseh 5 disciplinah. Pri vsakem športniku bo še podatek o narodnosti in številu osvojenih malih globusov v določeni disciplini.
+1.TABELA(zmagovalci.slo) - zmagovalci od leta 1966 do leta 2016:
+* sezona
+* spol
+* zmagovalec
+* spol
+* narodnost
+* točke
+* starost
 
-V tretji tabeli pa bodo zbrani skupni rezultati svetovnega pokala po državah (vrstice), v stolpcih pa bo prikazano skupno število zmag glede na spol in disciplino. Ker nekatere države ne obstajajo več in tabela predstavlja vse države, katere športniki so kadarkoli zmagali v svetovnem pokalu, bosta v tej skupni tabeli navadeni obe državi, "stara" in "nova".
+2.TABELA(discipline.slo) - smučarji z največ malimi globusi po disciplinah
+* disciplina
+* spol
+* smučar
+* narodnost
+* naslovi
 
-Na koncu pa bom v projekt vključila še zemljevid, ki bo imel obarvane države glede na tretjo tabelo - države, iz katerih so bili/so športniki/-ce, ki so osvojili kakšno zmago v svetovnem pokalu.
+3.TABELA(narodi1.slo) - število zmag posamezne države
+* država
+* spol
+* zmage
+
+4.TABELA(prizorisca1.slo) - prizorišča svetovnega pokala
+* prizorišče
+* kratica
+* država
+
+5.TABELA(prizorisca2) - število tekem na posameznem prizorišču
+* kratica
+* spol
+* tekme
+
+Poleg tabel projekt vsebuje še 4 grafe in 2 zemljevida in sicer:
+* graf1 - Število zmag po državah glede na spol
+* graf2 - Število točk zmagovalcev na sezono glede na spol
+* graf3 - Starost zmagovalcev glede na spol
+* graf4 - Število naslovov po disciplinah glede na spol
+* zem.zmagovalci - Število zmagovalcev svetovnega pokala
+* zem.prizorisca - Prizorišča tekem svetovnega pokala
+
+Namen projekta je, da analiziram zmagovalce svetovnega pokala in sicer: katere države imajo največ zmagovalcev, spreminjanje skupnega seštevka, koliko so bili stari ob zmagah(da vidim, če starost vpliva na fizično pripravljenost). Poleg tega ob tem primerjam tudi razliko v uspešnosti med moškimi in ženskami. To pa se nadaljuje tudi glede malih globusov. Uspešnost države bom ugotovila iz tabele števila zmag in to spet pregledala glede na spol in ekipe. Na koncu pa še na splošno pogledam kje se sploh odvijajo tekme in izluščim kje je smučanje bolj popularno oziroma kje so primerni pogoji.
 
 ## Program
 

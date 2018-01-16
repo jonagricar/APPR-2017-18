@@ -256,7 +256,7 @@ kratice.eng <- c(
   "pol" = "Poland",
   "bih" = "Bosnia and Herzegovina",
   "spa" = "Spain",
-  "rus" = "Russia",
+  "rus" = "Russian Federation",
   "svk" = "Slovakia",
   "cze" = "Czech Republic",
   "kor" = "South Korea",

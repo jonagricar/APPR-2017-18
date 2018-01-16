@@ -11,6 +11,11 @@ library(tidyr)
 library(digest)
 library(rgeos)
 library(maptools)
+library(rmarkdown)
+library(DT)
+library(extrafont)
+
+
 
 # Uvozimo funkcije za pobiranje in uvoz zemljevida.
 source("lib/uvozi.zemljevid.r", encoding = "UTF-8")
