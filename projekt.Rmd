@@ -34,7 +34,7 @@ source("uvoz/uvoz.r", encoding = "UTF-8")
 source("vizualizacija/vizualizacija.r", encoding ="UTF-8")
 ```
 
-Podatke sem uvozila iz [wikipedije](https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup) in [SKI-DB](http://www.ski-db.com/worldcup.php) v obliki HTML. Iz prve spletne strani sem pridobila delne podatke o zmagovalcih posameznih sezon, podatke o malih kristalnih globusih v posameznih disciplinah in podatke o državah, ki imajo vsaj kakšno zmago v svetovnem pokalu. Iz druge povezave pa sem pridobila še ostale podatke o zmagovalcih. Na koncu pa sem dodala še podatke o prizoriščih prav tako iz [SKI-DB](http://www.ski-db.com/worldcup.php). Podatki so prikazani v petih razpredelnicah v obliki *tidy data*.
+Podatke sem uvozila iz [wikipedije](https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup) in [SKI-DB](http://www.ski-db.com/worldcup.php) v obliki HTML. Iz prve spletne strani sem pridobila delne podatke o zmagovalcih posameznih sezon, podatke o malih kristalnih globusih v posameznih disciplinah in podatke o državah, ki imajo vsaj kakšno zmago v svetovnem pokalu. Iz druge povezave pa sem pridobila še ostale podatke o zmagovalcih. Na koncu pa sem dodala še podatke o prizoriščih prav tako iz [SKI-DB](http://www.ski-db.com/db/loc/main.php). Podatki so prikazani v petih razpredelnicah v obliki *tidy data*.
 
 
 1. `zmagovalci.slo` - podatki o zmagovalcih od leta 1966 do leta 2016
