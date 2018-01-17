@@ -4,11 +4,12 @@ Avtor: Jona Gričar
 
 Repozitorij z gradivi pri predmetu APPR v študijskem letu 2017/18
 
-## Tematika
+## Analiza svetovnega pokala v alpskem smučanju
 
 Za temo projekta sem si izbrala svetovni pokal v alpskem smučanju, saj ta šport spremljam že od malih nog in bi ga rada predstavila ter približala tudi ostalim. Podatke sem pridobila iz dveh spletnih strani:
 * https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup
 * http://www.ski-db.com/worldcup.php
+* http://www.ski-db.com/db/loc/main.php
 
 Projekt vsebuje 5 tabel in sicer(po stolpcih):
 

@@ -1,16 +1,16 @@
 ---
 title: "Poročilo pri predmetu Analiza podatkov s programom R"
-author: "Študent FMF"
+subtitle: "Analiza svetovnega pokala v alpskem smučanju"
+author: "Jona Gričar"
 output:
   html_document: default
   pdf_document:
     includes:
       in_header: lib/styles.sty
     latex_engine: xelatex
-runtime: shiny
 ---
 
-```{r setup, echo=FALSE, results='hide', message=FALSE}
+```{r setup, echo=FALSE, results='hide', warning=FALSE, message= FALSE}
 # Če želimo nastaviti pisave v PDF-ju, odkomentiramo
 # in sledimo navodilom v programu.
 #source("fontconfig.r", encoding = "UTF-8")
@@ -21,45 +21,79 @@ source("lib/libraries.r", encoding = "UTF-8")
 
 # Izbira teme
 
-Za vzorec bomo prikazali nekaj podatkov o slovenskih občinah.
+Za temo projekta sem si izbrala svetovni pokal v alpskem smučanju, saj ta šport spremljam že od malih nog in bi ga rada predstavila ter približala tudi ostalim.
+
 
 ***
+
 
 # Obdelava, uvoz in čiščenje podatkov
 
-```{r uvoz, echo=FALSE, message=FALSE}
+```{r uvoz, echo=FALSE, message=FALSE, warning=FALSE}
 source("uvoz/uvoz.r", encoding = "UTF-8")
+source("vizualizacija/vizualizacija.r", encoding ="UTF-8")
 ```
 
-Uvozili smo podatke o občinah v obliki CSV s statističnega urada ter v obliki HTML
-z Wikipedije. Podatke imamo v dveh razpredelnicah v obliki *tidy data*.
+Podatke sem uvozila iz [wikipedije](https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup) in [SKI-DB](http://www.ski-db.com/worldcup.php) v obliki HTML. Iz prve spletne strani sem pridobila delne podatke o zmagovalcih posameznih sezon, podatke o malih kristalnih globusih v posameznih disciplinah in podatke o državah, ki imajo vsaj kakšno zmago v svetovnem pokalu. Iz druge povezave pa sem pridobila še ostale podatke o zmagovalcih. Na koncu pa sem dodala še podatke o prizoriščih prav tako iz [SKI-DB](http://www.ski-db.com/worldcup.php). Podatki so prikazani v petih razpredelnicah v obliki *tidy data*.
 
-1. `druzine` - podatki o družinah za vsako občino
-  - `obcina` - spremenljivka: ime občine (neurejen faktor),
-  - `velikost.druzine` - spremenljivka: število otrok v družini (število: 1, 2, 3 ali 4, kjer zadnja vrednost pomeni 4 ali več),
-  - `stevilo.druzin` - meritev: število družin z ustreznim številom otrok v ustrezni občini (število).
 
-2. `obcine` - podatki o občinah
-  - `obcina` - spremenljivka: ime občine (neurejen faktor),
-  - `povrsina` - meritev: površina občine v km$^2$ (število),
-  - `prebivalci` - meritev: prebivalstvo občine (število),
-  - `gostota` - meritev: število prebivalcev na km$^2$ (število),
-  - `naselja` - meritev: število naselij v občini (število),
-  - `ustanovitev` - meritev: leto ustanovitve občine (število),
-  - `pokrajina` - meritev: pokrajina, ki ji občina pripada (neurejen faktor),
-  - `regija` - meritev: regija, ki ji občina pripada (neurejen faktor),
-  - `odcepitev` - meritev: podatki o občinah, od katerih se je občina odcepila (besedilo).
+1. `zmagovalci.slo` - podatki o zmagovalcih od leta 1966 do leta 2016
+  * `sezona` - spremenljivka:  sezone od 1966 do 2016 (numeric),
+  * `spol` - spremenljivka: moški(M) ali ženski(Z) (factor),
+  * `zmagovalec` - spremenljivka: ime in priimek športnika (character),
+  * `narodnost` - spremenljivka: narodnost športnika (character),
+  * `tocke` - meritev: dosežene točke v določeni sezoni za športnika (numeric),
+  * `starost` - meritev: starost v določeni sezoni za športnika (numeric).
 
-**Opomba**: da bi razpredelnica `obcine` res bila v obliki *tidy data*, bi morali odstraniti stolpec `gostota` (saj je izpeljan iz stolpcev `povrsina` in `prebivalci`), podatke o pokrajinah pa bi morali premakniti v drugo razpredelnico, saj nekatere občine pripadajo dvema pokrajinama. Podobno bi morali narediti tudi s stolpcem `odcepitev`.
-
-Spodnji graf prikazuje porazdelitev števila naselij v občinah.
-
-```{r histogram, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Histogram števila naselij v občinah'}
-ggplot(obcine, aes(x = naselja)) + geom_histogram() +
-  ggtitle("Pogostost števila naselij") + xlab("Število naselij") + ylab("Število občin")
+```{r zmagovalci.slo, echo=FALSE, message=FALSE}
+kable(head(zmagovalci.slo), align="cccccc")
 ```
+
+
+2. `discipline.slo` - podatki o dobitnikih največ malih kristalnih globusov
+  * `disciplina` - spremenljivka: 5 disciplin alpskega smučanja (character),
+  * `spol` - spremenljivka: moški(M) ali ženski(Z) (factor),
+  * `smucar` - spremenljivka: ime in priimek športnika (character),
+  * `narodnost` - spremenljivka: narodnost športnika (character),
+  * `naslovi` - meritev: število naslovov za najboljše po disciplinah (numeric).
+
+```{r discipline.slo, echo=FALSE, message=FALSE}
+kable(head(discipline.slo), align="ccccc")
+```
+
+
+3. `narodi1.slo` - podatki o zmagah posameznih držav
+  * `drzava` - spremenljivka:  države, ki imajo vsaj kakšno zmago v pokalu (character),
+  * `spol` - spremenljivka: moški ali ženski ali ekipno (factor),
+  * `zmage` - meritev: število zmag posamezne države glede na spol (numeric).
+
+```{r narodi1.slo, echo=FALSE, message=FALSE}
+kable(head(narodi1.slo), align="ccc")
+```
+
+  
+4. `prizorisca1.slo` - podatki o prizoriščih tekem (mesto in država)
+  * `prizorisce` - spremenljivka:  mesto, kjer je že bila tekma (character),
+  * `kratica` - spremenljivka: okrajšava za mesto (character),
+  * `drzava` - meritev: država, kjer se nahaja mesto tekme (character).
+
+```{r prizorisca1.slo, echo=FALSE, message=FALSE}
+kable(head(prizorisca1.slo))
+```
+
+
+5. `prizorisca2` - podatki o številu tekem na posameznem prizorišču
+  * `kratica` - spremenljivka:  okrajšava za mesto (character),
+  * `spol` - spremenljivka: moški ali ženski (factor),
+  * `tekme` - meritev: število tekem glede na spol (numeric).
+
+```{r prizorisca2, echo=FALSE, message=FALSE}
+kable(head(prizorisca2), align="ccc")
+```
+
 
 ***
+
 
 # Analiza in vizualizacija podatkov
 
@@ -67,37 +101,50 @@ ggplot(obcine, aes(x = naselja)) + geom_histogram() +
 source("vizualizacija/vizualizacija.r", encoding = "UTF-8")
 ```
 
-Spodnji zemljevid prikazuje povprečno velikost družine za vsako občino.
+Pri analizi podatkov sem si pomagala s štirimi grafi in dvema zemljevidoma. Njihov pomen in razlago bom predstavila spodaj.
+Preden sem začela s projektom, sem si postavila nekaj hipotez oziroma ide, ki se tičejo svetovnega pokala v alpskem smučanju. Ker tudi sama spremljam ta šport že nekaj let, je bilo to seveda lažje narediti. In sicer: zdelo se mi je, da bodo najboljši smučarji/-ke večinoma Evropejci/-ke, ker je smučanje tukaj bolj razvito oziroma popularno in tudi pogoji so boljši(podnebje, število smučišč itd.) ter da bodo mlajši športniki uspešnješi; zmagovalci večih sezon so ponavadi dobri v več kot eni disciplini, zato sem imela občutek, da se bo njihovo ime pojavilo tudi pri malih kristalnih globusih. Med najboljšimi državami sem pričakovala države osrednje evrope kot je npr. Avstrija, Italija, Francija zaradi že prej omenjenih razlogov. Kar pa se tiče prizorišč: ker je smučanje najbolj popularno v Evropi, naj bi bila tudi večina tekem tukaj. Na te hipoteze sem najboljše odgovore dobila iz grafov in zemljevidov.
 
-```{r zemljevid, echo=FALSE, fig.align='center', fig.cap='Zemljevid povprečnega števila otrok v družini'}
-ggplot() + geom_polygon(data = left_join(zemljevid, povprecja, by = c("OB_UIME" = "obcina")),
-                        aes(x = long, y = lat, group = group, fill = povprecje)) +
-  ggtitle("Povprečno število otrok v družini") + xlab("") + ylab("") +
-  guides(fill = guide_colorbar(title = "Povprečje"))
+
+Prvi in drugi graf prikazujeta karakteristike zmagovalcev posameznih sezon glede na spol (starost in točke).
+V prvem grafu vidimo, da starost zmagovalcev očitno ne igra velike vloge ne pri ženskah ne pri moških, ker starosti očitno zelo nihajo. od sredinskih vrednosti nabolj odstopata Avstrijka Annemarie Pröll, ki je leta 1970 uspela dobiti skupni seštevek pri rosnih 17, in Avstrijec Stephan Eberharter s 33 leti. Kjer vrednosti naraščajo linearno pomeni, da je isti smučar dobil več sezon zapored in bil logično eno leto starejši - npr. Marcel Hirscher.
+
+```{r graf3 , echo=FALSE, message=FALSE, fig.align='center' }
+print(graf3)
+```
+
+
+Z drugim grafom sem želela prikazati dosežene točke zmagovalcev. Na začetku se mi je zdelo, da razlik med moškimi in ženskami praktično ne bo. To je bilo res do leta 1991, potem pa se je točkovanje spremenilo - posamezna mesta so prinesla več točk. Tukaj se je začelo prepletanje - do leta 2007, ko sta imela Vonn in Miller skoraj enake točke. Vidimo pa lahko tudi, da so od takrat naprej ženske dosti boljše kar se tiče skupnega seštevka, saj so bolj univerzalne in vozijo v večih disciplinah. Višek je dosegla Tina Maze leta 2012 s 2414 točkami in tako postavila nov mejnik.
+
+```{r graf2 , echo=FALSE, message=FALSE, fig.align='center' }
+print(graf2)
+```
+
+
+Tretji graf prikazuje najboljše smučarje/-ke glede na disciplino. Tudi tukaj se mi je zdelo, da nekako ne bo velike razlike med spoloma. Vendar lahko vidimo, da v pridobljenih malih kristalnih globusih izstopata Vonn in Stenmark. Nadvlado v tehničnih disciplinah imajo moški, v hitrih pa ženske, glede zmnožnosti tako dobrega nastopanja skozi več let.
+
+```{r graf4 , echo=FALSE, message=FALSE, fig.align='center' }
+print(graf4)
+```
+
+
+V zadnjem grafu pa sem hotela predstaviti zmagepo državah glede na spol. Zelo lepo se vidi, da je Avstrija najmočnejša država v alpskem smučanju po številu zmag, kar sem tudi pričakovala. Med boljšimi pa so tudi ostale države osrednje države in sicer Švica, Francija in Italija kot napovedano. Vse te države imajo lego ob Alpah kar igra ogromno vlogo, saj imajo zelo dobre pogoje. Edina država izven Evrope pa je še ZDA, ki se lahko kosa z ostalo Evropo. Skoraj povsod so k zmagam največ prispevali moški, Avstrija pa ima enako močno moško in žensko zasedbo.
+
+```{r graf1 , echo=FALSE, message=FALSE, fig.align='center' }
+print(graf1)
+```
+
+
+Da bi se res videlo, katere države imajo najmočnejše smučarje/-ke oziroma zmagovalce sezon, sem to še predstavila z zemljevidom. Tukaj se lepo vidi, da je Evropa zares vodilna sila v tem športu. Sledi še ZDA, ostale celine pa so po pričakovanjih v senci. To ima seveda največ opraviti z geografskimi pogoji za smučanje in pa tudi z ekonomskim položajem države - če reprezentanca nima dovolj sredstev, je tudi treniranje manj uspešno.
+
+```{r zem.zmagovalci, echo=FALSE, message=FALSE, fig.align='center'}
+print(zem.zmagovalci)
+```
+
+
+V drugem zemljevidu pa lahko vidimo, kje se tekme sploh odvijajo in kako pogosto. Kot že napovedano, je največ prizorišč za tekme spet v osrednji Evropi in ZDA ter Kanadi, kjer je smučanje tudi bolj ravito in popularno. Nekaj tekem pa so priredili celo na južni polobli in sicer v Argentini, Avstraliji in na Novi Zelandiji. Športniki velikokrat tam trenirajo zaradi dobrih geografskih pogojev v gorah, tekme pa so ravno zato lahko tudi izpeljali.
+
+```{r zem.prizorisca, echo=FALSE, message=FALSE, fig.align='center'}
+print(zem.prizorisca)
 ```
 
 ***
-
-# Napredna analiza podatkov
-
-```{r analiza, echo=FALSE, message=FALSE}
-source("analiza/analiza.r", encoding = "UTF-8")
-```
-
-Spodnji graf prikazuje povezavo med številom naselij in površino občine.
-
-```{r graf, echo=FALSE, fig.align='center', fig.cap='Povezava med številom naselij in površino občine'}
-ggplot(inner_join(obcine, data.frame(obcina = names(skupine),
-                                     skupina = factor(skupine)), by = "obcina")
-, aes(x = povrsina, y = naselja, color = skupina, size = prebivalci/1000)) + geom_point() +
-  ggtitle("Število naselij glede na površino občine") +
-  xlab(expression("Površina (km"^2 * ")")) + ylab("Št. naselij") +
-  guides(color = guide_legend(title = "Skupina"),
-         size = guide_legend(title = "Prebivalci (* 1000)"))
-```
-
-***
-
-```{r shiny, echo = FALSE}
-shinyAppDir("shiny", options=list(width="100%", height=600))
-```
