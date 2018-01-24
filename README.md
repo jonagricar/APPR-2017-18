@@ -10,8 +10,9 @@ Za temo projekta sem si izbrala svetovni pokal v alpskem smučanju, saj ta špor
 * https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup
 * http://www.ski-db.com/worldcup.php
 * http://www.ski-db.com/db/loc/main.php
+* http://appsso.eurostat.ec.europa.eu/nui/show.do?query=BOOKMARK_DS-471197_QID_-361F748D_UID_-3F171EB0&layout=TIME%2CC%2CX%2C0%3BGEO%2CL%2CY%2C0%3BUNIT%2CL%2CZ%2C0%3BSECTOR%2CL%2CZ%2C1%3BCOFOG99%2CL%2CZ%2C2%3BNA_ITEM%2CL%2CZ%2C3%3BINDICATORS%2CC%2CZ%2C4%3B&zSelection=DS-471197INDICATORS%2COBS_FLAG%3BDS-471197UNIT%2CPC_TOT%3BDS-471197SECTOR%2CS13%3BDS-471197COFOG99%2CGF08%3BDS-471197NA_ITEM%2CTE%3B&rankName1=UNIT_1_2_-1_2&rankName2=SECTOR_1_2_-1_2&rankName3=INDICATORS_1_2_-1_2&rankName4=NA-ITEM_1_2_-1_2&rankName5=COFOG99_1_2_-1_2&rankName6=TIME_1_0_0_0&rankName7=GEO_1_2_0_1&sortC=ASC_-1_FIRST&rStp=&cStp=&rDCh=&cDCh=&rDM=true&cDM=true&footnes=false&empty=false&wai=false&time_mode=FIXED&time_most_recent=false&lang=en&cfo=%23%23%23%2C%23%23%23.%23%23%23%20
 
-Projekt vsebuje 5 tabel in sicer(po stolpcih):
+Projekt vsebuje 6 tabel in sicer(po stolpcih):
 
 1.TABELA(zmagovalci.slo) - zmagovalci od leta 1966 do leta 2016:
 * sezona
@@ -44,13 +45,19 @@ Projekt vsebuje 5 tabel in sicer(po stolpcih):
 * spol
 * tekme
 
-Poleg tabel projekt vsebuje še 4 grafe in 2 zemljevida in sicer:
+6.TABELA(bdp.slo) - delež bdp namenjen športu po državah
+* leto
+* drzava
+* delez
+
+Poleg tabel projekt vsebuje še 4 grafe in 3 zemljevide in sicer:
 * graf1 - Število zmag po državah glede na spol
 * graf2 - Število točk zmagovalcev na sezono glede na spol
 * graf3 - Starost zmagovalcev glede na spol
 * graf4 - Število naslovov po disciplinah glede na spol
 * zem.zmagovalci - Število zmagovalcev svetovnega pokala
 * zem.prizorisca - Prizorišča tekem svetovnega pokala
+* zem.bdp - Delež bdp za področje porta leta 2015
 
 Namen projekta je, da analiziram zmagovalce svetovnega pokala in sicer: katere države imajo največ zmagovalcev, spreminjanje skupnega seštevka, koliko so bili stari ob zmagah(da vidim, če starost vpliva na fizično pripravljenost). Poleg tega ob tem primerjam tudi razliko v uspešnosti med moškimi in ženskami. To pa se nadaljuje tudi glede malih globusov. Uspešnost države bom ugotovila iz tabele števila zmag in to spet pregledala glede na spol in ekipe. Na koncu pa še na splošno pogledam kje se sploh odvijajo tekme in izluščim kje je smučanje bolj popularno oziroma kje so primerni pogoji.
 

@@ -26,6 +26,9 @@ Za temo projekta sem si izbrala svetovni pokal v alpskem smučanju, saj ta špor
 
 ***
 
+![Stenmark](slike/stenmark.jpg)
+
+***
 
 # Obdelava, uvoz in čiščenje podatkov
 
@@ -34,7 +37,7 @@ source("uvoz/uvoz.r", encoding = "UTF-8")
 source("vizualizacija/vizualizacija.r", encoding ="UTF-8")
 ```
 
-Podatke sem uvozila iz [wikipedije](https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup) in [SKI-DB](http://www.ski-db.com/worldcup.php) v obliki HTML. Iz prve spletne strani sem pridobila delne podatke o zmagovalcih posameznih sezon, podatke o malih kristalnih globusih v posameznih disciplinah in podatke o državah, ki imajo vsaj kakšno zmago v svetovnem pokalu. Iz druge povezave pa sem pridobila še ostale podatke o zmagovalcih. Na koncu pa sem dodala še podatke o prizoriščih prav tako iz [SKI-DB](http://www.ski-db.com/db/loc/main.php). Podatki so prikazani v petih razpredelnicah v obliki *tidy data*.
+Podatke sem uvozila iz [wikipedije](https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup) in [SKI-DB](http://www.ski-db.com/worldcup.php) v obliki HTML. Iz prve spletne strani sem pridobila delne podatke o zmagovalcih posameznih sezon, podatke o malih kristalnih globusih v posameznih disciplinah in podatke o državah, ki imajo vsaj kakšno zmago v svetovnem pokalu. Iz druge povezave pa sem pridobila še ostale podatke o zmagovalcih. K temu sem dodala še podatke o prizoriščih prav tako iz [SKI-DB](http://www.ski-db.com/db/loc/main.php). Na koncu pa sem pri napredni analizi uporabila še [Eurostat](http://appsso.eurostat.ec.europa.eu/nui/show.do?query=BOOKMARK_DS-471197_QID_-361F748D_UID_-3F171EB0&layout=TIME%2CC%2CX%2C0%3BGEO%2CL%2CY%2C0%3BUNIT%2CL%2CZ%2C0%3BSECTOR%2CL%2CZ%2C1%3BCOFOG99%2CL%2CZ%2C2%3BNA_ITEM%2CL%2CZ%2C3%3BINDICATORS%2CC%2CZ%2C4%3B&zSelection=DS-471197INDICATORS%2COBS_FLAG%3BDS-471197UNIT%2CPC_TOT%3BDS-471197SECTOR%2CS13%3BDS-471197COFOG99%2CGF08%3BDS-471197NA_ITEM%2CTE%3B&rankName1=UNIT_1_2_-1_2&rankName2=SECTOR_1_2_-1_2&rankName3=INDICATORS_1_2_-1_2&rankName4=NA-ITEM_1_2_-1_2&rankName5=COFOG99_1_2_-1_2&rankName6=TIME_1_0_0_0&rankName7=GEO_1_2_0_1&sortC=ASC_-1_FIRST&rStp=&cStp=&rDCh=&cDCh=&rDM=true&cDM=true&footnes=false&empty=false&wai=false&time_mode=FIXED&time_most_recent=false&lang=en&cfo=%23%23%23%2C%23%23%23.%23%23%23%20) v obliki CSV in sicer za pregled o porabi sredstev države za področje športa. Podatki so prikazani v petih razpredelnicah v obliki *tidy data*.
 
 
 1. `zmagovalci.slo` - podatki o zmagovalcih od leta 1966 do leta 2016
@@ -91,6 +94,14 @@ kable(head(prizorisca1.slo))
 kable(head(prizorisca2), align="ccc")
 ```
 
+5. `bdp.slo` - podatki o deležu bdp-ja za področje športa za obdobje 2000-2016
+  * `leto` - spremenljivka:  leta od 2000 do 2016 (integer),
+  * `drzava` - spremenljivka: evropske države (character),
+  * `delez` - meritev: delez bdp za posamezno državo (numeric).
+
+```{r bdp.slo, echo=FALSE, message=FALSE}
+kable(head(prizorisca2), align="ccc")
+```
 
 ***
 
@@ -145,6 +156,18 @@ V drugem zemljevidu pa lahko vidimo, kje se tekme sploh odvijajo in kako pogosto
 
 ```{r zem.prizorisca, echo=FALSE, message=FALSE, fig.align='center'}
 print(zem.prizorisca)
+```
+
+***
+
+# Napredna analiza podatkov
+
+```{r analiza, echo=FALSE, message=FALSE, warning=FALSE}
+source("analiza/analiza.r", encoding = "UTF-8")
+```
+
+```{r zem.bdp, echo=FALSE, message=FALSE, fig.align='center'}
+print(zem.bdp)
 ```
 
 ***

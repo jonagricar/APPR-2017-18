@@ -90,7 +90,25 @@ drzave.slo <- c(
   "New Zealand" = "Nova Zelandija",
   "Russia" = "Rusija",
   "Slovakia" = "Slovaška",
-  "Czech Republic" = "Češka"
+  "Czech Republic" = "Češka",
+  "Belgium" = "Belgija",
+  "Bulgaria" = "Bolgarija",
+  "Cyprus" = "Ciper",
+  "Denmark" = "Danska",
+  "Estonia" = "Estonija",
+  "Greece" = "Grčija",
+  "Finland" = "Finska",
+  "Hungary" = "Madžarska",
+  "Ireland" = "Irska",
+  "Iceland" = "Islandija",
+  "Lithuania" = "Litva",
+  "Latvia" = "Latvija",
+  "Netherlands" = "Nizozemska",
+  "Poland" = "Poljska",
+  "Portugal" = "Portugalska",
+  "Romania" = "Romunija",
+  "United Kingdom" = "Velika Britanija",
+  "Malta" = "Malta"
 )
 
 zmagovalci.slo <- zmagovalci %>% mutate(narodnost = drzave.slo[narodnost])
@@ -275,8 +293,15 @@ prizorisca2 <- prizorisca %>% select(kratica, moski, zenske) %>%
   arrange(kratica, spol)
 
 
-# Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
-# potrebovali v 3. fazi, bi bilo smiselno funkcije dati v svojo
-# datoteko, tukaj pa bi klicali tiste, ki jih potrebujemo v
-# 2. fazi. Seveda bi morali ustrezno datoteko uvoziti v prihodnjih
-# fazah.
+# Funkcija, ki uvozi podatke iz datoteke government.csv
+uvozi.bdp <- function() {
+  data <- read_csv("podatki/government.csv", na = ":",
+                   locale = locale(encoding = "UTF-8"))
+  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
+  return(data)
+}
+
+bdp <- uvozi.bdp()
+bdp <- bdp[c(311:837) , c(1:2,7)]
+colnames(bdp) <- c("leto", "drzava", "delez")
+bdp.slo <- bdp %>% mutate(drzava = drzave.slo[drzava])

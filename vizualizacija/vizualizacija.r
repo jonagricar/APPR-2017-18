@@ -58,3 +58,4 @@ zem.prizorisca <- ggplot() +
                  right_join(svet, by = c("drzava" = "NAME_LONG")),
                aes(x = long, y = lat, group = group, fill = stevilo)) +
   ggtitle("Prizorišča tekem svetovnega pokala")
+
