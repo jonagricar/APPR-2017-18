@@ -26,7 +26,12 @@ Za temo projekta sem si izbrala svetovni pokal v alpskem smučanju, saj ta špor
 
 ***
 
-![Stenmark](slike/stenmark.jpg)
+<center>
+
+![Ingemar Stenmark](slike/stenmark.jpg)
+
+
+</center>
 
 ***
 
@@ -94,13 +99,13 @@ kable(head(prizorisca1.slo))
 kable(head(prizorisca2), align="ccc")
 ```
 
-5. `bdp.slo` - podatki o deležu bdp-ja za področje športa za obdobje 2000-2016
+6. `bdp.slo` - podatki o deležu bdp-ja za področje športa za obdobje 2000-2016
   * `leto` - spremenljivka:  leta od 2000 do 2016 (integer),
   * `drzava` - spremenljivka: evropske države (character),
-  * `delez` - meritev: delez bdp za posamezno državo (numeric).
+  * `delez` - meritev: delež bdp za posamezno državo (numeric).
 
 ```{r bdp.slo, echo=FALSE, message=FALSE}
-kable(head(prizorisca2), align="ccc")
+kable(head(bdp.slo), align="ccc")
 ```
 
 ***
@@ -160,14 +165,18 @@ print(zem.prizorisca)
 
 ***
 
-# Napredna analiza podatkov
-
-```{r analiza, echo=FALSE, message=FALSE, warning=FALSE}
-source("analiza/analiza.r", encoding = "UTF-8")
-```
+Za konec sem želela pogledati povezavo med uspešnostjo posameznih držav in vlaganjem teh držav oziroma vlade v področje športa in rekreacije. Zanimalo me je, če ima več vloženega kapitala vlogo pri razvoju športa in kako velika je. Pri tem delu analize sem pregledale podatke iz Eurostata glede na delež BDP in sicer za šport na splošno ne le za smučanje. Podatke sem poiskala le za Evropo, ker je po prejšnjih ugotovitvah tu smučanje najbolj razvito in večina najboljših smučarjev je Evropejcev.
 
 ```{r zem.bdp, echo=FALSE, message=FALSE, fig.align='center'}
 print(zem.bdp)
 ```
+
+Za analizo sem vzela le leto 2015, ker je to najbolj aktualno leto s podatki za skoraj vse države EU. Iz zemljevida lahko razberem, da države osrednje Evrope športu namenijo razmeroma majhen delež glede na BDP. Smučarske velesile kot so Avstrija, Italija, Nemčija so pravzaprav kar na dnu te lestvice. Glede na to, da so najuspešnejši smučarji/-ke ravno iz tega dela Evrope je to kar presenetljivo. Iz tega lahko sklepam, da ima kapital za šport manjšo vlogo pri doseganju rezultatov, pomembni so tudi geografski pogoji in pa sam talent in zmožnosti teh športnikov kot sem omenila že zgoraj. Natančnejšo analizo vpliva kapitala namenjenega smučanju bi lahko naredila le s podatki o tem, koliko denarja dobi posamezna smučarska zveza - žal pa ti podatki niso tako zelo javno dostopni.
+
+***
+
+# Povzetek
+
+
 
 ***

@@ -119,8 +119,8 @@ zmagovalci.slo <- zmagovalci %>% mutate(narodnost = drzave.slo[narodnost])
 uvozi.discipline1 <- function() {
   link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
   stran <- html_session(link) %>% read_html()
-  tabela3 <- stran %>% html_nodes(xpath="//table[@class='wikitable plainrowheaders']") %>%
-    .[[6]] %>% html_table(dec = ",")
+  tabela3 <- stran %>% html_nodes(xpath="//table[@class='wikitable']") %>%
+    .[[1]] %>% html_table(dec = ",")
   for (i in 1:ncol(tabela3)) {
     if (is.character(tabela3[[i]])) {
       Encoding(tabela3[[i]]) <- "UTF-8"
@@ -136,8 +136,8 @@ uvozi.discipline1 <- function() {
 uvozi.discipline2 <- function() {
   link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
   stran <- html_session(link) %>% read_html()
-  tabela4 <- stran %>% html_nodes(xpath="//table[@class='wikitable plainrowheaders']") %>%
-    .[[7]] %>% html_table(dec = ",")
+  tabela4 <- stran %>% html_nodes(xpath="//table[@class='wikitable']") %>%
+    .[[2]] %>% html_table(dec = ",")
   for (i in 1:ncol(tabela4)) {
     if (is.character(tabela4[[i]])) {
       Encoding(tabela4[[i]]) <- "UTF-8"
@@ -179,7 +179,7 @@ uvozi.narode <- function() {
   link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
   stran <- html_session(link) %>% read_html()
   narodi <- stran %>% html_nodes(xpath="//table[@class='wikitable plainrowheaders']") %>%
-    .[[50]] %>% html_table(dec = ",", fill = TRUE)
+    .[[48]] %>% html_table(dec = ",", fill = TRUE)
   for (i in 1:ncol(narodi)) {
     if (is.character(narodi[[i]])) {
       Encoding(narodi[[i]]) <- "UTF-8"
@@ -304,4 +304,4 @@ uvozi.bdp <- function() {
 bdp <- uvozi.bdp()
 bdp <- bdp[c(311:837) , c(1:2,7)]
 colnames(bdp) <- c("leto", "drzava", "delez")
-bdp.slo <- bdp %>% mutate(drzava = drzave.slo[drzava])
+bdp.slo <- bdp %>% mutate(drzava = drzave.slo[drzava]) %>% na.omit()

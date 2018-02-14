@@ -57,9 +57,9 @@ Poleg tabel projekt vsebuje še 4 grafe in 3 zemljevide in sicer:
 * graf4 - Število naslovov po disciplinah glede na spol
 * zem.zmagovalci - Število zmagovalcev svetovnega pokala
 * zem.prizorisca - Prizorišča tekem svetovnega pokala
-* zem.bdp - Delež bdp za področje porta leta 2015
+* zem.bdp - Delež bdp za področje športa leta 2015
 
-Namen projekta je, da analiziram zmagovalce svetovnega pokala in sicer: katere države imajo največ zmagovalcev, spreminjanje skupnega seštevka, koliko so bili stari ob zmagah(da vidim, če starost vpliva na fizično pripravljenost). Poleg tega ob tem primerjam tudi razliko v uspešnosti med moškimi in ženskami. To pa se nadaljuje tudi glede malih globusov. Uspešnost države bom ugotovila iz tabele števila zmag in to spet pregledala glede na spol in ekipe. Na koncu pa še na splošno pogledam kje se sploh odvijajo tekme in izluščim kje je smučanje bolj popularno oziroma kje so primerni pogoji.
+Namen projekta je, da analiziram zmagovalce svetovnega pokala in sicer: katere države imajo največ zmagovalcev, spreminjanje skupnega seštevka, koliko so bili stari ob zmagah(da vidim, če starost vpliva na fizično pripravljenost). Poleg tega ob tem primerjam tudi razliko v uspešnosti med moškimi in ženskami. To pa se nadaljuje tudi glede malih globusov. Uspešnost države bom ugotovila iz tabele števila zmag in to spet pregledala glede na spol in ekipe. Na koncu pa še na splošno pogledam kje se sploh odvijajo tekme in izluščim kje je smučanje bolj popularno oziroma kje so primerni pogoji. S pomočjo tega in podatkov o deležu bdp namenjenemu za šport bom pogledala, ali obstaja povezava med enim in drugim.
 
 ## Program
 
