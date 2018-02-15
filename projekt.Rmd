@@ -42,7 +42,7 @@ source("uvoz/uvoz.r", encoding = "UTF-8")
 source("vizualizacija/vizualizacija.r", encoding ="UTF-8")
 ```
 
-Podatke sem uvozila iz [wikipedije](https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup) in [SKI-DB](http://www.ski-db.com/worldcup.php) v obliki HTML. Iz prve spletne strani sem pridobila delne podatke o zmagovalcih posameznih sezon, podatke o malih kristalnih globusih v posameznih disciplinah in podatke o državah, ki imajo vsaj kakšno zmago v svetovnem pokalu. Iz druge povezave pa sem pridobila še ostale podatke o zmagovalcih. K temu sem dodala še podatke o prizoriščih prav tako iz [SKI-DB](http://www.ski-db.com/db/loc/main.php). Na koncu pa sem pri napredni analizi uporabila še [Eurostat](http://appsso.eurostat.ec.europa.eu/nui/show.do?query=BOOKMARK_DS-471197_QID_-361F748D_UID_-3F171EB0&layout=TIME%2CC%2CX%2C0%3BGEO%2CL%2CY%2C0%3BUNIT%2CL%2CZ%2C0%3BSECTOR%2CL%2CZ%2C1%3BCOFOG99%2CL%2CZ%2C2%3BNA_ITEM%2CL%2CZ%2C3%3BINDICATORS%2CC%2CZ%2C4%3B&zSelection=DS-471197INDICATORS%2COBS_FLAG%3BDS-471197UNIT%2CPC_TOT%3BDS-471197SECTOR%2CS13%3BDS-471197COFOG99%2CGF08%3BDS-471197NA_ITEM%2CTE%3B&rankName1=UNIT_1_2_-1_2&rankName2=SECTOR_1_2_-1_2&rankName3=INDICATORS_1_2_-1_2&rankName4=NA-ITEM_1_2_-1_2&rankName5=COFOG99_1_2_-1_2&rankName6=TIME_1_0_0_0&rankName7=GEO_1_2_0_1&sortC=ASC_-1_FIRST&rStp=&cStp=&rDCh=&cDCh=&rDM=true&cDM=true&footnes=false&empty=false&wai=false&time_mode=FIXED&time_most_recent=false&lang=en&cfo=%23%23%23%2C%23%23%23.%23%23%23%20) v obliki CSV in sicer za pregled o porabi sredstev države za področje športa. Podatki so prikazani v petih razpredelnicah v obliki *tidy data*.
+Podatke sem uvozila iz [wikipedije](https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup) in [SKI-DB](http://www.ski-db.com/worldcup.php) v obliki HTML. Iz prve spletne strani sem pridobila delne podatke o zmagovalcih posameznih sezon, podatke o malih kristalnih globusih v posameznih disciplinah in podatke o državah, ki imajo vsaj kakšno zmago v svetovnem pokalu. Iz druge povezave pa sem pridobila še ostale podatke o zmagovalcih. K temu sem dodala še podatke o prizoriščih prav tako iz [SKI-DB](http://www.ski-db.com/db/loc/main.php). Za konec pa sem uporabila še [Eurostat](http://appsso.eurostat.ec.europa.eu/nui/show.do?query=BOOKMARK_DS-471197_QID_-361F748D_UID_-3F171EB0&layout=TIME%2CC%2CX%2C0%3BGEO%2CL%2CY%2C0%3BUNIT%2CL%2CZ%2C0%3BSECTOR%2CL%2CZ%2C1%3BCOFOG99%2CL%2CZ%2C2%3BNA_ITEM%2CL%2CZ%2C3%3BINDICATORS%2CC%2CZ%2C4%3B&zSelection=DS-471197INDICATORS%2COBS_FLAG%3BDS-471197UNIT%2CPC_TOT%3BDS-471197SECTOR%2CS13%3BDS-471197COFOG99%2CGF08%3BDS-471197NA_ITEM%2CTE%3B&rankName1=UNIT_1_2_-1_2&rankName2=SECTOR_1_2_-1_2&rankName3=INDICATORS_1_2_-1_2&rankName4=NA-ITEM_1_2_-1_2&rankName5=COFOG99_1_2_-1_2&rankName6=TIME_1_0_0_0&rankName7=GEO_1_2_0_1&sortC=ASC_-1_FIRST&rStp=&cStp=&rDCh=&cDCh=&rDM=true&cDM=true&footnes=false&empty=false&wai=false&time_mode=FIXED&time_most_recent=false&lang=en&cfo=%23%23%23%2C%23%23%23.%23%23%23%20) v obliki CSV in sicer za pregled o porabi sredstev države za področje športa. Podatki so prikazani v šestih razpredelnicah v obliki *tidy data*.
 
 
 1. `zmagovalci.slo` - podatki o zmagovalcih od leta 1966 do leta 2016
@@ -99,7 +99,7 @@ kable(head(prizorisca1.slo))
 kable(head(prizorisca2), align="ccc")
 ```
 
-6. `bdp.slo` - podatki o deležu bdp-ja za področje športa za obdobje 2000-2016
+6. `bdp.slo` - izdatki države (delež BDP) za področje športa za obdobje 2000-2016
   * `leto` - spremenljivka:  leta od 2000 do 2016 (integer),
   * `drzava` - spremenljivka: evropske države (character),
   * `delez` - meritev: delež bdp za posamezno državo (numeric).
@@ -117,8 +117,8 @@ kable(head(bdp.slo), align="ccc")
 source("vizualizacija/vizualizacija.r", encoding = "UTF-8")
 ```
 
-Pri analizi podatkov sem si pomagala s štirimi grafi in dvema zemljevidoma. Njihov pomen in razlago bom predstavila spodaj.
-Preden sem začela s projektom, sem si postavila nekaj hipotez oziroma ide, ki se tičejo svetovnega pokala v alpskem smučanju. Ker tudi sama spremljam ta šport že nekaj let, je bilo to seveda lažje narediti. In sicer: zdelo se mi je, da bodo najboljši smučarji/-ke večinoma Evropejci/-ke, ker je smučanje tukaj bolj razvito oziroma popularno in tudi pogoji so boljši(podnebje, število smučišč itd.) ter da bodo mlajši športniki uspešnješi; zmagovalci večih sezon so ponavadi dobri v več kot eni disciplini, zato sem imela občutek, da se bo njihovo ime pojavilo tudi pri malih kristalnih globusih. Med najboljšimi državami sem pričakovala države osrednje evrope kot je npr. Avstrija, Italija, Francija zaradi že prej omenjenih razlogov. Kar pa se tiče prizorišč: ker je smučanje najbolj popularno v Evropi, naj bi bila tudi večina tekem tukaj. Na te hipoteze sem najboljše odgovore dobila iz grafov in zemljevidov.
+Pri analizi podatkov sem si pomagala s štirimi grafi in tremi zemljevidi. Njihov pomen in razlago bom predstavila spodaj.
+Preden sem začela s projektom, sem si postavila nekaj hipotez oziroma ideje, ki se tičejo svetovnega pokala v alpskem smučanju. Ker tudi sama spremljam ta šport že nekaj let, je bilo to seveda lažje narediti. In sicer: zdelo se mi je, da bodo najboljši smučarji/-ke večinoma Evropejci/-ke, ker je smučanje tukaj bolj razvito oziroma popularno in tudi pogoji so boljši(podnebje, število smučišč itd.) ter da bodo mlajši športniki uspešnješi; zmagovalci večih sezon so ponavadi dobri v več kot eni disciplini, zato sem imela občutek, da se bo njihovo ime pojavilo tudi pri malih kristalnih globusih. Med najboljšimi državami sem pričakovala države osrednje evrope kot je npr. Avstrija, Italija, Francija zaradi že prej omenjenih razlogov. Kar pa se tiče prizorišč: ker je smučanje najbolj popularno v Evropi, naj bi bila tudi večina tekem tukaj. Na te hipoteze sem najboljše odgovore dobila iz grafov in zemljevidov.
 
 
 Prvi in drugi graf prikazujeta karakteristike zmagovalcev posameznih sezon glede na spol (starost in točke).
@@ -129,7 +129,7 @@ print(graf3)
 ```
 
 
-Z drugim grafom sem želela prikazati dosežene točke zmagovalcev. Na začetku se mi je zdelo, da razlik med moškimi in ženskami praktično ne bo. To je bilo res do leta 1991, potem pa se je točkovanje spremenilo - posamezna mesta so prinesla več točk. Tukaj se je začelo prepletanje - do leta 2007, ko sta imela Vonn in Miller skoraj enake točke. Vidimo pa lahko tudi, da so od takrat naprej ženske dosti boljše kar se tiče skupnega seštevka, saj so bolj univerzalne in vozijo v večih disciplinah. Višek je dosegla Tina Maze leta 2012 s 2414 točkami in tako postavila nov mejnik.
+Z drugim grafom sem želela prikazati dosežene točke zmagovalcev. Na začetku se mi je zdelo, da razlik med moškimi in ženskami praktično ne bo. To je bilo res do leta 1991, potem pa se je točkovanje spremenilo - posamezna mesta so prinesla več točk. Tukaj se je začelo prepletanje - do leta 2007, ko sta imela Vonn in Miller skoraj enake točke. Vidimo pa lahko tudi, da so od takrat naprej ženske dosti boljše v pridobivanju točk in dobrih rezultatov, saj so bolj univerzalne in vozijo v večih disciplinah. Višek je dosegla Tina Maze leta 2012 s 2414 točkami in tako postavila nov mejnik.
 
 ```{r graf2 , echo=FALSE, message=FALSE, fig.align='center' }
 print(graf2)
@@ -143,7 +143,7 @@ print(graf4)
 ```
 
 
-V zadnjem grafu pa sem hotela predstaviti zmagepo državah glede na spol. Zelo lepo se vidi, da je Avstrija najmočnejša država v alpskem smučanju po številu zmag, kar sem tudi pričakovala. Med boljšimi pa so tudi ostale države osrednje države in sicer Švica, Francija in Italija kot napovedano. Vse te države imajo lego ob Alpah kar igra ogromno vlogo, saj imajo zelo dobre pogoje. Edina država izven Evrope pa je še ZDA, ki se lahko kosa z ostalo Evropo. Skoraj povsod so k zmagam največ prispevali moški, Avstrija pa ima enako močno moško in žensko zasedbo.
+V zadnjem grafu pa sem hotela predstaviti zmage po državah glede na spol. Zelo lepo se vidi, da je Avstrija najmočnejša država v alpskem smučanju po številu zmag, kar sem tudi pričakovala. Med boljšimi pa so tudi ostale države osrednje Evrope in sicer Švica, Francija in Italija kot napovedano. Vse te države imajo lego ob Alpah, kar igra ogromno vlogo, saj imajo zelo dobre pogoje za treninge - smučanje je seveda bolj popularno tam, kjer se ga da izvajati. Edina država izven Evrope pa je še ZDA, ki se lahko kosa z ostalo Evropo. Skoraj povsod so k zmagam največ prispevali moški, Avstrija pa ima enako močno moško in žensko zasedbo.
 
 ```{r graf1 , echo=FALSE, message=FALSE, fig.align='center' }
 print(graf1)
@@ -157,7 +157,7 @@ print(zem.zmagovalci)
 ```
 
 
-V drugem zemljevidu pa lahko vidimo, kje se tekme sploh odvijajo in kako pogosto. Kot že napovedano, je največ prizorišč za tekme spet v osrednji Evropi in ZDA ter Kanadi, kjer je smučanje tudi bolj ravito in popularno. Nekaj tekem pa so priredili celo na južni polobli in sicer v Argentini, Avstraliji in na Novi Zelandiji. Športniki velikokrat tam trenirajo zaradi dobrih geografskih pogojev v gorah, tekme pa so ravno zato lahko tudi izpeljali.
+V drugem zemljevidu pa lahko vidimo, kje se tekme sploh odvijajo in kako pogosto. Kot že napovedano, je največ prizorišč za tekme spet v osrednji Evropi in ZDA ter Kanadi, kjer je smučanje tudi bolj ravito in podnebje primerno. Nekaj tekem pa so priredili celo na južni polobli in sicer v Argentini, Avstraliji in na Novi Zelandiji. Športniki velikokrat tam trenirajo zaradi dobrih geografskih pogojev v gorah, tekme pa so ravno zato lahko tudi izpeljali.
 
 ```{r zem.prizorisca, echo=FALSE, message=FALSE, fig.align='center'}
 print(zem.prizorisca)
@@ -177,6 +177,14 @@ Za analizo sem vzela le leto 2015, ker je to najbolj aktualno leto s podatki za 
 
 # Povzetek
 
+Skozi izdelavo tega projekta sem pridobila kar nekaj novih znanj na področju smučanja in razumevanju določenih dejavnikov, ki vplivajo na svetovni pokal in rezultate.
 
+<center>
+
+![Tina Maze leta 2013](slike/maze.jpeg)
+
+</center>
+
+Celotno raziskavo lahko povzamem nekako takole. Velike razlike med spoloma v tem športu ni, prav tako starost ni nek pomemben dejavnik. Lahko bi celo rekla, da bodo tisti pravi zmagovalci, ki so konstantni že več sezon, še nekaj časa na vrhu lestvic kljub starosti. Oprema je skozi čas napredovala, izkušnje pa prav tako naredijo svoje. Poleg tega pa imam občutek, da Tinin točkovni rekord ne bo zdržal prav dolgo, saj je v zadnjem času vse več univerzalnih smučarjev v vseh disciplinah, ki si želijo večjih uspehov v svetovnem pokalu - veliki kristalni globus. Mislim, da smučanje ne bo več dolgo samo evropska specialiteta. Ravno taki dogodki, kot so letošnje zimske olimpijske igre in možnost spremljanja po celem svetu, šport zelo približajo mladim iz celega sveta in jim dajo željo biti kot vsi veliki zmagovalci.
 
 ***
